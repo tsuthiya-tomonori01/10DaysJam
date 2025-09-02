@@ -19,6 +19,10 @@ private:
 	//WORLDTRANSFORM
 	KamataEngine::WorldTransform worldTransform_;
 
+	//プレイヤー・ジャンプ・変数
+
+
+	//プレイヤー・画像
 	uint32_t PlayerTexture_ = 0u;
 };
 

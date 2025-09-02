@@ -29,5 +29,5 @@ void Player::Update()
 
 void Player::Draw()
 {
-	
+	//プレイヤーの描画
 }
