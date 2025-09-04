@@ -1,9 +1,11 @@
 #include <Novice.h>
 #include "KamataEngine.h"
 
+#include "GameScene.h"
+
 using namespace KamataEngine;
 
-const char kWindowTitle[] = "LE4C_18_ツチヤ_トモノリ";
+const char kWindowTitle[] = "4049_変幻洞窟";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -11,6 +13,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1280, 720);
 	
+	GameScene* gameScene = new GameScene();
+
+	gameScene->Initialize();
+
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
 	char preKeys[256] = {0};
@@ -28,6 +34,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		/// ↓更新処理ここから
 		///
 
+		gameScene->Update();
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -35,6 +43,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		///
 		/// ↓描画処理ここから
 		///
+
+		gameScene->Draw();
 
 		///
 		/// ↑描画処理ここまで
@@ -48,6 +58,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 	}
+
+	//delete gameScene;
+	//gameScene = nullptr;
 
 	// ライブラリの終了
 	Novice::Finalize();

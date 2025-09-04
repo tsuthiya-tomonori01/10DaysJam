@@ -2,32 +2,24 @@
 
 using namespace KamataEngine;
 
-void Player::Start()
+void Player::Initialize()
 {
-	worldTransform_.Initialize();
-
-	PlayerAlive_ = false;
+	playerPosition_ = { 100.0f,550.0f };
 }
 
 void Player::Update()
 {
-	if (PlayerAlive_ == true)
+	if (Input::GetInstance()->PushKey(DIK_D))
 	{
-		//プレイヤー・移動
-		if (Input::GetInstance()->PushKey(DIK_D))
-		{
-			worldTransform_.translation_.x += 10;
-		}
-		else if (Input::GetInstance()->PushKey(DIK_A))
-		{
-			worldTransform_.translation_.x -= 10;
-		}
-
-		//プレイヤー・ジャンプ
+		playerPosition_.x += PlayerSpeed_;
+	}
+	else if (Input::GetInstance()->PushKey(DIK_A))
+	{
+		playerPosition_.x -= PlayerSpeed_;
 	}
 }
 
 void Player::Draw()
 {
-	//プレイヤーの描画
+	Novice::DrawBox(int(playerPosition_.x), int(playerPosition_.y), playerwide, playerHigh, 0.0f, WHITE, kFillModeSolid);
 }
