@@ -2,20 +2,33 @@
 #include "KamataEngine.h"
 
 #include "GameScene.h"
+#include "TitleScene.h"
 
 using namespace KamataEngine;
 
 const char kWindowTitle[] = "4049_変幻洞窟";
 
+void ChangeScene();
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
+	const int KWindowWidth = 1280;
+
+	const int KWindowHeight = 700;
+
 	// ライブラリの初期化
-	Novice::Initialize(kWindowTitle, 1280, 720);
-	
-	GameScene* gameScene = new GameScene();
+	Novice::Initialize(kWindowTitle, KWindowWidth, KWindowHeight);
+
+	GameScene* gameScene = new GameScene;
+	TitleScene* titleScene = new TitleScene;
+
+	//最初のシーンの初期化
+
+	titleScene->Initialize();
 
 	gameScene->Initialize();
+
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -34,6 +47,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		/// ↓更新処理ここから
 		///
 
+		titleScene->Update();
+
 		gameScene->Update();
 
 		///
@@ -43,6 +58,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		///
 		/// ↓描画処理ここから
 		///
+		
+		titleScene->Draw();
 
 		gameScene->Draw();
 

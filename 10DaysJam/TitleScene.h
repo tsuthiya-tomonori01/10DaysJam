@@ -1,4 +1,7 @@
 ﻿#pragma once
+#include "KamataEngine.h"
+#include "Novice.h"
+
 class TitleScene
 {
 public:
@@ -8,5 +11,9 @@ public:
 	void Update();
 
 	void Draw();
+
+private:
+
+	bool finished_ = false;
 };
 

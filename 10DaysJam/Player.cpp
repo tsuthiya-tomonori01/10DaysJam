@@ -4,11 +4,14 @@ using namespace KamataEngine;
 
 void Player::Initialize()
 {
-	playerPosition_ = { 100.0f,550.0f };
+	playerPosition_ = { 65.0f,577.0f };
+	PlayerVelocity = { 0.0f,0.0f };
+	PlayerAccelarationn = { 0.0f,-0.8f };
 }
 
 void Player::Update()
 {
+	//プレイヤー・移動
 	if (Input::GetInstance()->PushKey(DIK_D))
 	{
 		playerPosition_.x += PlayerSpeed_;
