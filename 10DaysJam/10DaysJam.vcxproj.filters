@@ -20,19 +20,16 @@
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
       <Filter>KamataEngine\Adapter</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="MapChip.cpp">
+    <ClCompile Include="stage1.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="stage1.cpp">
+    <ClCompile Include="Stage.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,10 +115,9 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h">
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="MapChip.h" />
     <ClInclude Include="stage1.h" />
+    <ClInclude Include="Stage.h" />
   </ItemGroup>
 </Project>

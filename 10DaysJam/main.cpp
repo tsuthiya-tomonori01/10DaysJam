@@ -1,14 +1,10 @@
 #include <Novice.h>
 #include "KamataEngine.h"
-
-#include "GameScene.h"
-#include "TitleScene.h"
+#include "Stage.h"
 
 using namespace KamataEngine;
 
 const char kWindowTitle[] = "4049_変幻洞窟";
-
-void ChangeScene();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -20,15 +16,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, KWindowWidth, KWindowHeight);
 
-	GameScene* gameScene = new GameScene;
-	TitleScene* titleScene = new TitleScene;
+	Stage* stage = new Stage;
 
 	//最初のシーンの初期化
-
-	titleScene->Initialize();
-
-	gameScene->Initialize();
-
+	stage->Initialize();
 
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
@@ -47,9 +38,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		/// ↓更新処理ここから
 		///
 
-		titleScene->Update();
-
-		gameScene->Update();
+		stage->Update();
 
 		///
 		/// ↑更新処理ここまで
@@ -59,9 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		/// ↓描画処理ここから
 		///
 		
-		titleScene->Draw();
-
-		gameScene->Draw();
+		stage->Draw();
 
 		///
 		/// ↑描画処理ここまで

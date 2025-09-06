@@ -4,30 +4,23 @@ using namespace KamataEngine;
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+
+	delete stage_;
+}
 
 void GameScene::Initialize() {
 
-	//プレイヤー
-	player_ = new Player();
-	player_->Initialize();
-
-	mapChip_ = new MapChip();
-	mapChip_->Initialize();
+	stage_ = new Stage;
+	stage_->Initialize();
 }
 
 void GameScene::Update() {
 
-	//プレイヤー
-	player_->Update();
-
-	mapChip_->Update();
+	stage_->Update();
 }
 
 void GameScene::Draw() {
 	
-	mapChip_->Draw();
-
-	//プレイヤー
-	player_->Draw();
+	stage_->Draw();
 }
