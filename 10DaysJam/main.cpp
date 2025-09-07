@@ -1,6 +1,7 @@
 #include <Novice.h>
 #include "KamataEngine.h"
-#include "Stage.h"
+
+#include "GameManager.h"
 
 using namespace KamataEngine;
 
@@ -16,11 +17,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, KWindowWidth, KWindowHeight);
 
-	Stage* stage = new Stage;
-
-	//最初のシーンの初期化
-	stage->Initialize();
-
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
 	char preKeys[256] = {0};
@@ -34,25 +30,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		memcpy(preKeys, keys, 256);
 		Novice::GetHitKeyStateAll(keys);
 
-		///
-		/// ↓更新処理ここから
-		///
+		GameManager* gameManager = new GameManager();
 
-		stage->Update();
-
-		///
-		/// ↑更新処理ここまで
-		///
-
-		///
-		/// ↓描画処理ここから
-		///
-		
-		stage->Draw();
-
-		///
-		/// ↑描画処理ここまで
-		///
+		gameManager->Run();
 
 		// フレームの終了
 		Novice::EndFrame();
@@ -62,9 +42,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 	}
-
-	//delete gameScene;
-	//gameScene = nullptr;
 
 	// ライブラリの終了
 	Novice::Finalize();

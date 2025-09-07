@@ -10,6 +10,13 @@ void Stage::Initialize() {
 void Stage::Update() {
 
 	PlayerUpdate();
+	BulletUpdate();
+
+	//境界線
+	CheckBoundary();
+
+	//当たり判定
+	GetAllCollision();
 }
 
 void Stage::Draw() {
@@ -20,11 +27,19 @@ void Stage::Draw() {
 			if (map[y][x] == 1) {
 				Novice::DrawSprite(int(block[y][x].pos.x - scrollX), int(block[y][x].pos.y), gh1, 2, 2, 0.0f, WHITE);
 			}
+			if (map[y][x] == 2) {
+				Novice::DrawSprite(int(block[y][x].pos.x - scrollX), int(block[y][x].pos.y), gh2, 2, 2, 0.0f, WHITE);
+			}
 		}
 	}
 
 	//プレイヤーの描画
 	Novice::DrawBox(int(playerPos.x - scrollX), int(playerPos.y), int(playerRad), int(playerRad), 0.0f, BLUE, kFillModeSolid);
+
+	if (isBullet)
+	{
+		Novice::DrawEllipse(int(BulletPos.x - scrollX), int(BulletPos.y), int(BulletRadius), int(BulletRadius), 0.0f, RED, kFillModeSolid);
+	}
 }
 
 void Stage::PlayerInitialize()
@@ -41,10 +56,16 @@ void Stage::PlayerUpdate()
 {
 	PlayerMove();
 
-	if (Input::GetInstance()->PushKey(DIK_SPACE))
+	if (Boundary1) 
 	{
-		PlayerJumpInitialize();
+		speed = 8.0f; 
 	}
+	else 
+	{
+		speed = 5.0f;
+	}
+
+	PlayerJumpUpdate();
 }
 
 void Stage::PlayerMove()
@@ -68,6 +89,24 @@ void Stage::PlayerMove()
 		}
 	}
 
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump)
+	{
+		PlayerJumppInitialize();
+		if (isJump)
+		{
+			PlayerJumpUpdate();
+		}
+	}
+
+	if (Input::GetInstance()->IsPressMouse(0) && !isBullet)
+	{
+		BulletInitialize();
+		if (isBullet)
+		{
+			BulletUpdate();
+		}
+	}
+
 	if (playerPos.x >= scrollStartX) {
 		if (playerPos.x + scrollX >= mapEndPos.x + 32) {
 			scrollX = scrollX;
@@ -78,14 +117,113 @@ void Stage::PlayerMove()
 	}
 }
 
-void Stage::PlayerJumpInitialize()
+void Stage::PlayerJumppInitialize()
 {
+	isJump = true;
+	jumpSpeed = -36.0f;
+}
 
+void Stage::PlayerGravity() {
+
+	//重力処理
+	if (map[int((playerPos.y + playerRad) / blockSize)][int((playerPos.x) / blockSize)] != BLOCK &&
+		map[int((playerPos.y + playerRad) / blockSize)][int((playerPos.x + playerRad - 1) / blockSize)] != BLOCK) {
+	}
+	else {
+		isGravity = false;
+	}
+	if (isGravity && !isJump) {
+		if (map[int(playerPos.y + playerRad + 10) / blockSize][int(playerPos.x) / blockSize] != BLOCK &&
+			map[int(playerPos.y + playerRad + 10) / blockSize][int(playerPos.x + playerRad - 1) / blockSize] != BLOCK) {
+		}
+	}
 }
 
 void Stage::PlayerJumpUpdate()
 {
+	// ジャンプ処理
+	if (isJump) {
+		// 上昇
+		if (jumpSpeed <= 0) {
+			if (map[int((playerPos.y + jumpSpeed) / blockSize)][int(playerPos.x) / blockSize] != BLOCK &&
+				map[int((playerPos.y + jumpSpeed) / blockSize)][int(playerPos.x + playerRad - 1) / blockSize] != BLOCK) {
+				playerPos.y += jumpSpeed;
+				jumpSpeed += 4.0f;
+			}
+			else {
+				// ぶつかった
+				jumpSpeed = 0;
+			}
+		}
+		// 下降
+		else {
+			if (map[int((playerPos.y + playerRad + jumpSpeed)) / blockSize][int(playerPos.x) / blockSize] != BLOCK &&
+				map[int((playerPos.y + playerRad + jumpSpeed)) / blockSize][int(playerPos.x + playerRad - 1) / blockSize] != BLOCK) {
+				playerPos.y += jumpSpeed;
+			}
+			else {
+				// 着地
+				isJump = false;
+				jumpSpeed = 0;
+				playerPos.y = 576.0f;
+			}
+		}
 
+	}
+	// 落下開始
+	else if (!isJump) {
+		if (map[int((playerPos.y + playerRad + 0) / blockSize)][int(playerPos.x) / blockSize] != BLOCK &&
+			map[int((playerPos.y + playerRad + 0) / blockSize)][int(playerPos.x + playerRad - 1) / blockSize] != BLOCK) {
+			jumpSpeed = 0;
+			isGravity = true;
+		}
+		else {}
+	}
+}
+
+
+void Stage::BulletInitialize()
+{
+
+	isBullet = true;
+
+	if (isLeft)
+	{
+		BulletSpeed = -10.0f;  // ← 左向き発射
+	}
+	
+	else if (Boundary1 == true)
+	{
+		BulletSpeed = 5.0f;
+	}
+	else
+	{
+		BulletSpeed = 10.0f;   // → 右向き（デフォルト）
+	}
+
+	BulletRadius = 16.0f;
+
+	// 弾をプレイヤーの位置に生成（中央 or 右手など）
+	BulletPos.x = playerPos.x;
+	BulletPos.y = playerPos.y + playerRad / 2 - BulletRadius / 2;
+}
+
+void Stage::BulletUpdate()
+{
+	if (!isBullet) return;
+
+	// 弾を進める
+	BulletPos.x += BulletSpeed;
+
+	// マップのブロックと衝突しているか確認
+	int mapX = int((BulletPos.x + BulletRadius / 2) / blockSize);
+	int mapY = int((BulletPos.y + BulletRadius / 2) / blockSize);
+
+	if (map[mapY][mapX] == BLOCK)
+	{
+		// ブロックに当たったら弾を消す
+		isBullet = false;
+	}
 }
 
 void Stage::CreateMap() {
@@ -132,6 +270,12 @@ void Stage::CreateMap() {
 				block[y][x].imagePos.x = 128.0f;
 				block[y][x].imagePos.y = 0.0f;
 			}
+
+			else if (map[y][x] == 2) {
+				block[y][x].state = TRAP;
+				block[y][x].imagePos.x = 128.0f;
+				block[y][x].imagePos.y = 0.0f;
+			}
 			else {}
 		}
 	}
@@ -141,20 +285,58 @@ void Stage::Reset() {
 
 	CreateMap();
 	PlayerInitialize();
+
+
+	isLeft = false;
+	isRight = true;
+	isJump = false;
+}
+
+void Stage::CheckBoundary()
+{
+	float boundaryX = 1280.0f;
+
+	if (playerPos.x >= boundaryX) 
+	{
+		Boundary1 = true;
+	}
+	else 
+	{
+		Boundary1 = false;
+	}
 }
 
 void Stage::GetAllCollision()
 {
-
-}
-
-void Stage::Player2MapCollision()
-{
-
+	CheckTrapCollision();
 }
 
 void Stage::Player2EnemyCollision()
 {
 
+}
+
+void Stage::CheckTrapCollision()
+{
+	int playerLeft = int(playerPos.x) / blockSize;
+	int playerRight = int(playerPos.x + playerRad - 1) / blockSize;
+	int playerTop = int(playerPos.y) / blockSize;
+	int playerBottom = int(playerPos.y + playerRad - 1) / blockSize;
+
+	// プレイヤーが重なっているマスの中にトラップがあるかチェック
+	for (int y = playerTop; y <= playerBottom; y++) {
+		for (int x = playerLeft; x <= playerRight; x++) {
+			if (map[y][x] == TRAP) {
+				// トラップに触れた！
+				OnPlayerHitTrap();
+				return;
+			}
+		}
+	}
+}
+
+void Stage::OnPlayerHitTrap()
+{
+	PlayerHP -= 1;
 }
 

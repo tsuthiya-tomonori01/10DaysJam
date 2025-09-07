@@ -2,18 +2,22 @@
 #include "KamataEngine.h"
 #include "Novice.h"
 
-class TitleScene
+#include "Iscene.h"
+
+class TitleScene : public Iscene
 {
 public:
 
-	void Initialize();
+	void Initialize() override;
 
-	void Update();
+	void Update() override;
 
-	void Draw();
+	void Draw() override;
+
+	~TitleScene();
 
 private:
 
-	bool finished_ = false;
+
 };
 
