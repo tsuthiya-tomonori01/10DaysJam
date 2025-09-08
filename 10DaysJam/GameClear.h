@@ -4,7 +4,7 @@
 
 #include "Iscene.h"
 
-class TitleScene : public Iscene
+class GameClear : public Iscene
 {
 public:
 
@@ -14,6 +14,6 @@ public:
 
 	void Draw() override;
 
-	~TitleScene();
+	~GameClear();
 };
 

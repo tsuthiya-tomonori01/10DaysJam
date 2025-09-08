@@ -49,17 +49,18 @@ private:
 	void PlayerGravity();
 
 	//境界線
-	void CheckBoundary();
+	void CheckBoundary1();
+
+	void CheckBoundary2();
+
+	//落下
+	void IsFallCheck();
 
 	//変数・その他
 
 	//マップチップ
 	int map[100][100]{};
 	KamataEngine::Vector2 mapEndPos = {};
-
-	int gh1 = Novice::LoadTexture("block.png");
-
-	int gh2 = Novice::LoadTexture("Trap.png");
 
 	float mapCountX = 0.0f;
 	float mapCountY = 0.0f;
@@ -98,9 +99,9 @@ private:
 	
 	float kRectCenterX = 400;
 	float kRectCenterY = 100;
-
-	int PlayerHP;
 	
+	int PlayerHP;
+
 	float playerRad;
 	float speed;
 	float playerAcceleration = 0.8f;
@@ -126,8 +127,19 @@ private:
 
 	//境界線
 	bool Boundary1 = false;
+	bool Boundary2 = false;
+
+	//落下判定
+	bool FallCheck = false;
 
 	//画像・読み込み
 
+	//マップチップ
+	int gh1 = Novice::LoadTexture("block.png");
+	int gh2 = Novice::LoadTexture("Trap.png");
+
+	//プレイヤー
+
+	//エネミー
 };
 

@@ -13,7 +13,10 @@ void Stage::Update() {
 	BulletUpdate();
 
 	//境界線
-	CheckBoundary();
+	CheckBoundary1();
+
+	//落下
+	IsFallCheck();
 
 	//当たり判定
 	GetAllCollision();
@@ -72,7 +75,7 @@ void Stage::PlayerMove()
 {
 	if (Input::GetInstance()->PushKey(DIK_A))
 	{
-		if (map[int(playerPos.y) / blockSize][int(playerPos.x - speed) / blockSize] != BLOCK&&
+		if (map[int(playerPos.y) / blockSize][int(playerPos.x - speed) / blockSize] != BLOCK &&
 			map[int(playerPos.y + playerRad - 1) / blockSize][int(playerPos.x - speed) / blockSize] != BLOCK) {
 			playerPos.x -= speed;
 			isLeft = true;
@@ -81,7 +84,7 @@ void Stage::PlayerMove()
 	}
 	else if (Input::GetInstance()->PushKey(DIK_D))
 	{
-		if (map[int(playerPos.y) / blockSize][int(playerPos.x + speed + playerRad) / blockSize] != BLOCK&&
+		if (map[int(playerPos.y) / blockSize][int(playerPos.x + speed + playerRad) / blockSize] != BLOCK &&
 			map[int(playerPos.y + playerRad - 1) / blockSize][int(playerPos.x + speed + playerRad) / blockSize] != BLOCK) {
 			playerPos.x += speed;
 			isLeft = false;
@@ -98,7 +101,7 @@ void Stage::PlayerMove()
 		}
 	}
 
-	if (Input::GetInstance()->IsPressMouse(0) && !isBullet)
+	if (Input::GetInstance()->IsPressMouse(1) && !isBullet)
 	{
 		BulletInitialize();
 		if (isBullet)
@@ -239,7 +242,7 @@ void Stage::CreateMap() {
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1},
 	};
 	
 	//マップ生成
@@ -286,23 +289,52 @@ void Stage::Reset() {
 	CreateMap();
 	PlayerInitialize();
 
+	scrollX = 0;
 
 	isLeft = false;
 	isRight = true;
 	isJump = false;
 }
 
-void Stage::CheckBoundary()
+void Stage::CheckBoundary1()
 {
-	float boundaryX = 1280.0f;
+	float boundaryX1 = 1280.0f;
 
-	if (playerPos.x >= boundaryX) 
+	if (playerPos.x >= boundaryX1) 
 	{
 		Boundary1 = true;
 	}
 	else 
 	{
 		Boundary1 = false;
+	}
+}
+
+void Stage::CheckBoundary2()
+{
+	float boundaryX2 = 1280.0f;
+
+	if (playerPos.x >= boundaryX2 && Boundary1 == true)
+	{
+		Boundary2 = true;
+	}
+	else
+	{
+		Boundary2 = false;
+		Boundary1 = true;
+	}
+}
+
+void Stage::IsFallCheck()
+{
+	if (playerPos.y >= 700)
+	{
+		FallCheck = true;
+		if (FallCheck == true)
+		{
+			playerPos = { 129.0f,576.0f };
+			scrollX = 0;
+		}
 	}
 }
 
@@ -313,7 +345,7 @@ void Stage::GetAllCollision()
 
 void Stage::Player2EnemyCollision()
 {
-
+	
 }
 
 void Stage::CheckTrapCollision()
