@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "KamataEngine.h"
 #include "Novice.h"
-
 #include "Iscene.h"
 
 class Stage : public Iscene
@@ -19,6 +18,7 @@ private:
 	//関数
 	void CreateMap();
 
+	//player
 	void PlayerInitialize();
 
 	void PlayerUpdate();
@@ -28,6 +28,11 @@ private:
 	void PlayerJumppInitialize();
 
 	void PlayerJumpUpdate();
+
+	//Enemy
+	void EnemyInit();
+
+	void EnemyUpdate();
 
 	//弾
 	void BulletInitialize();
@@ -39,6 +44,7 @@ private:
 	//関数・当たり判定
 	void GetAllCollision();
 	void Player2EnemyCollision();
+	void EnemyHitBulletCollision();
 
 	//トラップ
 	void CheckTrapCollision();
@@ -109,6 +115,16 @@ private:
 	float jumpSpeed = 0.0f;
 
 	bool isGravity = false;
+
+	//エネミー
+	KamataEngine::Vector2 enemy1Pos = {};//実ポジション
+
+	KamataEngine::Vector2 enemy1LeftTop = {};//左上のXY座標
+	KamataEngine::Vector2 enemy1RightTop = {};//右上のXY座標
+	KamataEngine::Vector2 enemy1LeftBottom = {};//左下のXY座標
+	KamataEngine::Vector2 enemy1RightBottom = {};//右下のXY座標
+
+	bool isEnemy1Alive = true;
 
 	//弾
 	KamataEngine::Vector2 BulletPos = {};

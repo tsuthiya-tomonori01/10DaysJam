@@ -11,6 +11,7 @@ void Stage::Update() {
 
 	PlayerUpdate();
 	BulletUpdate();
+	EnemyUpdate();
 
 	//境界線
 	CheckBoundary();
@@ -40,6 +41,13 @@ void Stage::Draw() {
 	{
 		Novice::DrawEllipse(int(BulletPos.x - scrollX), int(BulletPos.y), int(BulletRadius), int(BulletRadius), 0.0f, RED, kFillModeSolid);
 	}
+
+	//エネミー描画
+	if (isEnemy1Alive == true)
+	{
+		Novice::DrawBox(int(enemy1Pos.x - scrollX), int(enemy1Pos.y), int(playerRad), int(playerRad), 0.0f, RED, kFillModeSolid);
+	}
+
 }
 
 void Stage::PlayerInitialize()
@@ -101,6 +109,7 @@ void Stage::PlayerMove()
 	if (Input::GetInstance()->IsPressMouse(0) && !isBullet)
 	{
 		BulletInitialize();
+
 		if (isBullet)
 		{
 			BulletUpdate();
@@ -181,6 +190,23 @@ void Stage::PlayerJumpUpdate()
 	}
 }
 
+void Stage::EnemyInit()
+{
+	//初期化
+	enemy1Pos = { 1200.0f,576.0f };
+
+}
+
+void Stage::EnemyUpdate()
+{
+	//エネミーの重力処理
+	if (isEnemy1Alive == true)
+	{
+		if (map[int((enemy1Pos.y + playerRad) / blockSize)][int((enemy1Pos.x) / blockSize)] != BLOCK &&
+			map[int((enemy1Pos.y + playerRad) / blockSize)][int((enemy1Pos.x + playerRad - 1) / blockSize)] != BLOCK) {
+		}
+	}
+}
 
 void Stage::BulletInitialize()
 {
@@ -285,11 +311,15 @@ void Stage::Reset() {
 
 	CreateMap();
 	PlayerInitialize();
-
+	EnemyInit();
 
 	isLeft = false;
 	isRight = true;
 	isJump = false;
+
+	//各エネミーが生存しているか
+	isEnemy1Alive = true;
+
 }
 
 void Stage::CheckBoundary()
@@ -306,16 +336,40 @@ void Stage::CheckBoundary()
 	}
 }
 
+//当たり判定まとめ
 void Stage::GetAllCollision()
 {
 	CheckTrapCollision();
+	Player2EnemyCollision();
+	EnemyHitBulletCollision();
 }
 
+//自機と敵
 void Stage::Player2EnemyCollision()
 {
-
+	if (playerPos.x + speed + playerRad >= enemy1Pos.x && playerPos.y == enemy1Pos.y)
+	{
+		speed = 0;
+		playerPos.x -= 1;
+		PlayerHP -= 1;
+	}
+	else
+	{
+		speed = 5.0f;
+	}
 }
 
+//敵と玉
+void Stage::EnemyHitBulletCollision()
+{
+	if (BulletPos.x + BulletRadius / 2 >= enemy1Pos.x)
+	{
+		isBullet = false;
+		isEnemy1Alive = false;
+	}
+}
+
+//自機と罠
 void Stage::CheckTrapCollision()
 {
 	int playerLeft = int(playerPos.x) / blockSize;
