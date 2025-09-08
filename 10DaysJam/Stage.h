@@ -56,6 +56,9 @@ private:
 	//落下
 	void IsFallCheck();
 
+	//終了判定
+	void StageFinish();
+
 	//変数・その他
 
 	//マップチップ

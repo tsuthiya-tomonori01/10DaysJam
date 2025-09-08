@@ -18,6 +18,9 @@ void Stage::Update() {
 	//落下
 	IsFallCheck();
 
+	//ステージ終了判定
+	StageFinish();
+
 	//当たり判定
 	GetAllCollision();
 }
@@ -336,6 +339,10 @@ void Stage::IsFallCheck()
 			scrollX = 0;
 		}
 	}
+}
+
+void Stage::StageFinish()
+{
 }
 
 void Stage::GetAllCollision()
