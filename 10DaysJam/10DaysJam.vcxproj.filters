@@ -26,9 +26,6 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="stage1.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
@@ -123,7 +120,6 @@
     </ClInclude>
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="stage1.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Iscene.h" />

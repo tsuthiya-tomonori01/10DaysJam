@@ -98,9 +98,10 @@ private:
 	
 	float kRectCenterX = 400;
 	float kRectCenterY = 100;
+
+	int PlayerHP;
 	
 	float playerRad;
-	int PlayerHP;
 	float speed;
 	float playerAcceleration = 0.8f;
 
