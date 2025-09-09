@@ -3,6 +3,7 @@
 #include "Novice.h"
 
 #include "Iscene.h"
+#include "Enemy.h"
 
 class Stage : public Iscene
 {
@@ -38,12 +39,13 @@ private:
 
 	//関数・当たり判定
 	void GetAllCollision();
-	void Player2EnemyCollision();
+	void PlayerEnemyCollision();
+	void BulletEnemyCollision();
 
 	//トラップ
 	void CheckTrapCollision();
 
-	void OnPlayerHitTrap();
+	void OnPlayerDamege();
 
 	//重力
 	void PlayerGravity();
@@ -53,11 +55,10 @@ private:
 
 	void CheckBoundary2();
 
-	//落下
-	void IsFallCheck();
-
 	//終了判定
 	void StageFinish();
+
+	void CreateGoal();
 
 	//変数・その他
 
@@ -74,6 +75,7 @@ private:
 		NONE,
 		BLOCK,
 		TRAP,
+		FALL,
 		ENEMY,
 	};
 
@@ -114,6 +116,15 @@ private:
 
 	bool isGravity = false;
 
+	//敵の生成
+	std::list<std::unique_ptr<Enemy>> enemies_;
+
+	bool isHitP2E = false;
+
+	int enemyMax = 0;
+
+	int enemyKillCount = 0;
+
 	//弾
 	KamataEngine::Vector2 BulletPos = {};
 	 
@@ -132,14 +143,17 @@ private:
 	bool Boundary1 = false;
 	bool Boundary2 = false;
 
-	//落下判定
-	bool FallCheck = false;
+	//ゴール
+	KamataEngine::Vector2 GoalPos = {};
+	bool GolaActive = false;
 
 	//画像・読み込み
 
 	//マップチップ
 	int gh1 = Novice::LoadTexture("block.png");
-	int gh2 = Novice::LoadTexture("Trap.png");
+	int gh2 = Novice::LoadTexture("stoneedge.png");
+
+	int gh3 = Novice::LoadTexture("background.png");
 
 	//プレイヤー
 

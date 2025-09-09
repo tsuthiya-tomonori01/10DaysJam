@@ -3,8 +3,6 @@
 using namespace KamataEngine;
 
 void TitleScene::Initialize() {
-
-	
 }
 
 void TitleScene::Update() {
@@ -22,4 +20,6 @@ void TitleScene::Draw() {
 
 TitleScene::~TitleScene()
 {
+
+	
 }

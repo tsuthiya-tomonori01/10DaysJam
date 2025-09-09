@@ -10,7 +10,7 @@ void GameClear::Update()
 {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE))
 	{
-		sceneNo = CLEAR;
+		sceneNo = TITLE;
 	}
 }
 

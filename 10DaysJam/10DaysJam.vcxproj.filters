@@ -38,6 +38,9 @@
     <ClCompile Include="GameClear.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -127,5 +130,6 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Iscene.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="Enemy.h" />
   </ItemGroup>
 </Project>

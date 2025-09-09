@@ -12,11 +12,13 @@ void Stage::Update() {
 	PlayerUpdate();
 	BulletUpdate();
 
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Update();
+	}
+
 	//境界線
 	CheckBoundary1();
-
-	//落下
-	IsFallCheck();
+	CheckBoundary2();
 
 	//ステージ終了判定
 	StageFinish();
@@ -26,6 +28,8 @@ void Stage::Update() {
 }
 
 void Stage::Draw() {
+
+	Novice::DrawSprite(850 - scrollX, 0, gh3, 1.0, 1.5, 0.0f, WHITE);
 
 	//ブロックの描画
 	for (int y = 0; y < 100; y++) {
@@ -39,12 +43,25 @@ void Stage::Draw() {
 		}
 	}
 
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Draw(scrollX);
+	}
+
+	Novice::DrawBox(850 - scrollX, 0, 20, 700, 0.0f, RED, kFillModeSolid);
+
+	Novice::DrawBox(1920 - scrollX, 0, 20, 700, 0.0f, RED, kFillModeSolid);
+
 	//プレイヤーの描画
 	Novice::DrawBox(int(playerPos.x - scrollX), int(playerPos.y), int(playerRad), int(playerRad), 0.0f, BLUE, kFillModeSolid);
 
 	if (isBullet)
 	{
 		Novice::DrawEllipse(int(BulletPos.x - scrollX), int(BulletPos.y), int(BulletRadius), int(BulletRadius), 0.0f, RED, kFillModeSolid);
+	}
+
+	if (GolaActive) {
+		// ゴールを描画（ここでは簡単に四角形で表現）
+		Novice::DrawBox(int(GoalPos.x - scrollX), int(GoalPos.y), 64, 64, 0.0f, GREEN, kFillModeSolid);
 	}
 }
 
@@ -114,8 +131,8 @@ void Stage::PlayerMove()
 	}
 
 	if (playerPos.x >= scrollStartX) {
-		if (playerPos.x + scrollX >= mapEndPos.x + 32) {
-			scrollX = scrollX;
+		if (playerPos.x - scrollStartX > 1720) {
+			scrollX = 1720;
 		}
 		else {
 			scrollX = int(playerPos.x - scrollStartX);
@@ -126,7 +143,15 @@ void Stage::PlayerMove()
 void Stage::PlayerJumppInitialize()
 {
 	isJump = true;
-	jumpSpeed = -36.0f;
+
+	if (Boundary2)
+	{
+		jumpSpeed = -16.0f;
+	}
+	else
+	{
+		jumpSpeed = -36.0f;
+	}
 }
 
 void Stage::PlayerGravity() {
@@ -187,7 +212,6 @@ void Stage::PlayerJumpUpdate()
 	}
 }
 
-
 void Stage::BulletInitialize()
 {
 
@@ -197,17 +221,13 @@ void Stage::BulletInitialize()
 	{
 		BulletSpeed = -10.0f;  // ← 左向き発射
 	}
-	
-	else if (Boundary1 == true)
-	{
-		BulletSpeed = 5.0f;
-	}
 	else
 	{
 		BulletSpeed = 10.0f;   // → 右向き（デフォルト）
 	}
 
 	BulletRadius = 16.0f;
+	BulletPos = { 0.0f,0.0f };
 
 	// 弾をプレイヤーの位置に生成（中央 or 右手など）
 	BulletPos.x = playerPos.x;
@@ -225,7 +245,7 @@ void Stage::BulletUpdate()
 	int mapX = int((BulletPos.x + BulletRadius / 2) / blockSize);
 	int mapY = int((BulletPos.y + BulletRadius / 2) / blockSize);
 
-	if (map[mapY][mapX] == BLOCK)
+	if (map[mapY][mapX] == BLOCK || map[mapX][mapY] == ENEMY)
 	{
 		// ブロックに当たったら弾を消す
 		isBullet = false;
@@ -234,18 +254,18 @@ void Stage::BulletUpdate()
 
 void Stage::CreateMap() {
 
-	int mapTmp1[100][100] = {
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1},
+	int mapTmp1[15][50] = {
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,4,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,2,0,0,2,0,4,0,0,0,0,0,0,0,0,0,4,0,0,0,4,0,0,0,0,0,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	};
 	
 	//マップ生成
@@ -282,6 +302,26 @@ void Stage::CreateMap() {
 				block[y][x].imagePos.x = 128.0f;
 				block[y][x].imagePos.y = 0.0f;
 			}
+
+			//敵がいる場合
+			else if (map[y][x] == 4) {
+				block[y][x].state = ENEMY;
+
+				//敵の生成
+				std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
+
+				//初期化
+				newEnemy->Initialize(Vector2{ float(x * blockSize), float(float(y * blockSize)) });
+				//リストに敵を登録する, std::moveでユニークポインタの所有権移動
+				enemies_.push_back(std::move(newEnemy));
+
+				//イテレータ
+				for (std::unique_ptr<Enemy>& enemy : enemies_) {
+					//更新
+					enemy->Update();
+				}
+				enemyMax++;
+			}
 			else {}
 		}
 	}
@@ -294,14 +334,19 @@ void Stage::Reset() {
 
 	scrollX = 0;
 
+	isHitP2E = false;
+
 	isLeft = false;
 	isRight = true;
 	isJump = false;
+
+	Boundary1 = false;
+	Boundary2 = false;
 }
 
 void Stage::CheckBoundary1()
 {
-	float boundaryX1 = 1280.0f;
+	float boundaryX1 = 850.0f;
 
 	if (playerPos.x >= boundaryX1) 
 	{
@@ -315,7 +360,7 @@ void Stage::CheckBoundary1()
 
 void Stage::CheckBoundary2()
 {
-	float boundaryX2 = 1280.0f;
+	float boundaryX2 = 1920.0f;
 
 	if (playerPos.x >= boundaryX2 && Boundary1 == true)
 	{
@@ -328,31 +373,73 @@ void Stage::CheckBoundary2()
 	}
 }
 
-void Stage::IsFallCheck()
+void Stage::StageFinish()
 {
-	if (playerPos.y >= 700)
-	{
-		FallCheck = true;
-		if (FallCheck == true)
-		{
-			playerPos = { 129.0f,576.0f };
-			scrollX = 0;
-		}
+	if (!GolaActive) return;
+
+	// プレイヤーとゴールの衝突判定
+	float goalRadius = 32.0f;  // ゴールの半径（例として32に設定）
+	if (playerPos.x < GoalPos.x + goalRadius &&
+		playerPos.x + playerRad > GoalPos.x &&
+		playerPos.y < GoalPos.y + goalRadius &&
+		playerPos.y + playerRad > GoalPos.y) {
+		
+		sceneNo = CLEAR;
 	}
 }
 
-void Stage::StageFinish()
+void Stage::CreateGoal()
 {
+	GoalPos = { 2880.0f, 576.0f };  // ゴールの位置を設定（例：右側に設置）
+
+	// ゴールをアクティブにする
+	GolaActive = true;
 }
 
 void Stage::GetAllCollision()
 {
 	CheckTrapCollision();
+	PlayerEnemyCollision();
+	BulletEnemyCollision();
 }
 
-void Stage::Player2EnemyCollision()
+void Stage::PlayerEnemyCollision()
 {
-	
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		if (playerPos.y <= enemy->GetPosition().y + enemy->GetRad() &&
+			playerPos.y + playerRad >= enemy->GetPosition().y) {
+			if (playerPos.x <= enemy->GetPosition().x + enemy->GetRad() &&
+				playerPos.x + playerRad >= enemy->GetPosition().x) {
+				if (enemy->GetisEnemyAlive()) {
+					isHitP2E = true;
+					OnPlayerDamege();
+				}
+			}
+		}
+	}
+}
+
+void Stage::BulletEnemyCollision()
+{
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		if (BulletPos.y <= enemy->GetPosition().y + enemy->GetRad() &&
+			BulletPos.y + BulletRadius >= enemy->GetPosition().y) {
+			if (BulletPos.x <= enemy->GetPosition().x + enemy->GetRad() &&
+				BulletPos.x + BulletRadius >= enemy->GetPosition().x) {
+				if (enemy->GetisEnemyAlive()) {
+
+					enemy->SetisEnemyAlive(false);
+					isBullet = false;
+
+					enemyKillCount++;
+					if (enemyMax <= enemyKillCount) {
+						//ステージ転換エフェクトフラグ
+						CreateGoal();
+					}
+				}
+			}
+		}
+	}
 }
 
 void Stage::CheckTrapCollision()
@@ -367,14 +454,14 @@ void Stage::CheckTrapCollision()
 		for (int x = playerLeft; x <= playerRight; x++) {
 			if (map[y][x] == TRAP) {
 				// トラップに触れた！
-				OnPlayerHitTrap();
+				OnPlayerDamege();
 				return;
 			}
 		}
 	}
 }
 
-void Stage::OnPlayerHitTrap()
+void Stage::OnPlayerDamege()
 {
 	PlayerHP -= 1;
 }
