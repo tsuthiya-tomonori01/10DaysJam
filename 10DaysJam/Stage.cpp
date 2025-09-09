@@ -4,6 +4,10 @@ using namespace KamataEngine;
 
 void Stage::Initialize() {
 
+	soundDataHandle_ = Audio::GetInstance()->LoadWave("gameBGM.wav");
+
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true);
+
 	Reset();
 }
 
@@ -254,7 +258,7 @@ void Stage::BulletUpdate()
 
 void Stage::CreateMap() {
 
-	int mapTmp1[15][50] = {
+	int mapTmp1[100][100] = {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -385,6 +389,7 @@ void Stage::StageFinish()
 		playerPos.y + playerRad > GoalPos.y) {
 		
 		sceneNo = CLEAR;
+		Audio::GetInstance()->StopWave(voiceHandle_);
 	}
 }
 

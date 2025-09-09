@@ -155,6 +155,11 @@ private:
 
 	int gh3 = Novice::LoadTexture("background.png");
 
+	//音楽
+	uint32_t soundDataHandle_ = 0;
+
+	uint32_t voiceHandle_ = 0;
+
 	//プレイヤー
 
 	//エネミー
