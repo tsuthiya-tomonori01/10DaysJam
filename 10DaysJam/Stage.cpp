@@ -20,6 +20,12 @@ void Stage::Update() {
 		enemy->Update();
 	}
 
+	if (DamageFlag) {
+		Timer--;
+		if (Timer <= 0) {
+			DamageFlag = false;
+		}
+	}
 	//境界線
 	CheckBoundary1();
 	CheckBoundary2();
@@ -57,6 +63,8 @@ void Stage::Draw() {
 
 	//プレイヤーの描画
 	Novice::DrawBox(int(playerPos.x - scrollX), int(playerPos.y), int(playerRad), int(playerRad), 0.0f, BLUE, kFillModeSolid);
+	Novice::ScreenPrintf(100, 100, "%d", PlayerHP);
+	Novice::ScreenPrintf(100, 200, "%d", Timer);
 
 	if (isBullet)
 	{
@@ -76,7 +84,8 @@ void Stage::PlayerInitialize()
 	playerRad = 64.0f;
 
 	PlayerHP = 5;
-
+	DamageFlag = false;
+	Timer = 0;
 	speed = 5.0f;
 	playerAcceleration = 0.8f;
 }
@@ -343,6 +352,7 @@ void Stage::Reset() {
 	isLeft = false;
 	isRight = true;
 	isJump = false;
+	DamageFlag = false;
 
 	Boundary1 = false;
 	Boundary2 = false;
@@ -467,6 +477,16 @@ void Stage::CheckTrapCollision()
 
 void Stage::OnPlayerDamege()
 {
+	if (DamageFlag)return;
+
 	PlayerHP -= 1;
+
+	DamageFlag = true;
+	Timer = 60;
+	if (PlayerHP <= 0) {
+		PlayerHP = 0;
+
+		sceneNo = OVER;
+	}
 }
 

@@ -108,7 +108,8 @@ private:
 	float kRectCenterY = 100;
 	
 	int PlayerHP;
-
+	bool DamageFlag;
+	int Timer;
 	float playerRad;
 	float speed;
 	float playerAcceleration = 0.8f;
