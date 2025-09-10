@@ -171,9 +171,7 @@ private:
 
 	//プレイヤー
 
-	//エネミー
-
 	//境界線
-	int Bog = Novice::LoadTexture("Boundary.png");
+	int Bog = Novice::LoadTexture("border.png");
 };
 

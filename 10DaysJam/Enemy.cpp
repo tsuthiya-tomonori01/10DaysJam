@@ -18,7 +18,7 @@ void Enemy::Draw(int x) {
 
 	if (EnemyAlive)
 	{
-		Novice::DrawBox(int(enemyPos.x) - x, int(enemyPos.y), int(enemyRad), int(enemyRad), 0.0f, BLUE, kFillModeSolid);
+		Novice::DrawSprite(int(enemyPos.x) - x, int(enemyPos.y),EnemyPng,1.0,1.0, 0.0f, BLUE);
 	}
 }
 

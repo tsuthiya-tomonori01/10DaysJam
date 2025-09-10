@@ -42,7 +42,7 @@ private:
 	float enemyRad;
 
 	//エネミー画像
-	int EG;
+	int EnemyPng = Novice::LoadTexture("Enemy.png");
 
 };
 
