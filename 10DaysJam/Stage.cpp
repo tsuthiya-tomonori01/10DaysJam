@@ -78,8 +78,8 @@ void Stage::Draw() {
 	}
 
 	if (GolaActive) {
-		// ゴールを描画（ここでは簡単に四角形で表現）
-		Novice::DrawBox(int(GoalPos.x - scrollX), int(GoalPos.y), 64, 64, 0.0f, GREEN, kFillModeSolid);
+		// ゴールを描画
+		Novice::DrawSprite(int(GoalPos.x - scrollX), int(GoalPos.y),GoalP,1.0,1.0, 0.0f, WHITE);
 	}
 
 
@@ -421,7 +421,7 @@ void Stage::StageFinish()
 
 void Stage::CreateGoal()
 {
-	GoalPos = { 2880.0f, 576.0f };  // ゴールの位置を設定（例：右側に設置）
+	GoalPos = { 2880.0f, 512.0f };  // ゴールの位置を設定（例：右側に設置）
 
 	// ゴールをアクティブにする
 	GolaActive = true;

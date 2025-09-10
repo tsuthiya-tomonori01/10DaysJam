@@ -172,6 +172,9 @@ private:
 	//プレイヤー
 	int PBg1 = Novice::LoadTexture("Player1.png");
 	int PBg2 = Novice::LoadTexture("Player2.png");
+	 
+	//ゴール
+	int GoalP = Novice::LoadTexture("gate.png");
 
 	//境界線
 	int Bog = Novice::LoadTexture("border.png");
