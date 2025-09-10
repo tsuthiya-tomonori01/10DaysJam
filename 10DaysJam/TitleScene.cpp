@@ -21,7 +21,7 @@ void TitleScene::Update() {
 
 void TitleScene::Draw() {
 
-	
+	Novice::DrawSprite(0, 0, Tbg, 1.0, 1.0, 0.0f, WHITE);
 }
 
 TitleScene::~TitleScene()

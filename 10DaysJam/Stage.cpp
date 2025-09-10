@@ -33,7 +33,13 @@ void Stage::Update() {
 
 void Stage::Draw() {
 
+	//stage背景
+	Novice::DrawSprite(0 - scrollX, 0,   gh4, 1.0, 1.0, 0.0f, WHITE);
 	Novice::DrawSprite(850 - scrollX, 0, gh3, 1.0, 1.5, 0.0f, WHITE);
+	Novice::DrawSprite(1920 - scrollX, 0, gh5, 1.0, 1.0, 0.0f, WHITE);
+
+	//チュートリアル
+	Novice::DrawSprite(250 - scrollX, 120, TuBg, 1.0, 1.0, 0.0f, WHITE);
 
 	//ブロックの描画
 	for (int y = 0; y < 100; y++) {
@@ -51,9 +57,9 @@ void Stage::Draw() {
 		enemy->Draw(scrollX);
 	}
 
-	Novice::DrawBox(850 - scrollX, 0, 20, 700, 0.0f, RED, kFillModeSolid);
+	Novice::DrawSprite(850 - scrollX, 0, Bog,1.0f,1.0f,0.0f,WHITE);
 
-	Novice::DrawBox(1920 - scrollX, 0, 20, 700, 0.0f, RED, kFillModeSolid);
+	Novice::DrawSprite(1920 - scrollX, 0, Bog, 1.0f, 1.0f, 0.0f, WHITE);
 
 	//プレイヤーの描画
 	Novice::DrawBox(int(playerPos.x - scrollX), int(playerPos.y), int(playerRad), int(playerRad), 0.0f, BLUE, kFillModeSolid);
@@ -66,6 +72,16 @@ void Stage::Draw() {
 	if (GolaActive) {
 		// ゴールを描画（ここでは簡単に四角形で表現）
 		Novice::DrawBox(int(GoalPos.x - scrollX), int(GoalPos.y), 64, 64, 0.0f, GREEN, kFillModeSolid);
+	}
+
+
+	if (GolaActive)
+	{
+		Novice::DrawSprite(450, 20, GcbgE, 0.5, 0.5, 0.0f, WHITE);
+	}
+	else
+	{
+		Novice::DrawSprite(450, 20, GCbgS, 0.5, 0.5, 0.0f, WHITE);
 	}
 }
 
@@ -127,7 +143,7 @@ void Stage::PlayerMove()
 		}
 	}
 
-	if (Input::GetInstance()->IsPressMouse(1) && !isBullet)
+	if (Input::GetInstance()->IsPressMouse(0) && !isBullet)
 	{
 		BulletInitialize();
 		if (isBullet)
@@ -346,6 +362,8 @@ void Stage::Reset() {
 
 	Boundary1 = false;
 	Boundary2 = false;
+
+	GolaActive = false;
 }
 
 void Stage::CheckBoundary1()

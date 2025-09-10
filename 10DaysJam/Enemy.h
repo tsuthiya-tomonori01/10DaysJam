@@ -41,9 +41,6 @@ private:
 	//エネミー大きさ
 	float enemyRad;
 
-	//エネミー速度
-	float enemySpeed;
-
 	//エネミー画像
 	int EG;
 

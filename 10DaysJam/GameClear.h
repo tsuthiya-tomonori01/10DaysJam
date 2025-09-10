@@ -17,5 +17,10 @@ public:
 	void Draw() override;
 
 	~GameClear();
+
+private:
+
+	//ゲームクリア
+	int GCbg = Novice::LoadTexture("gameclear.png");
 };
 

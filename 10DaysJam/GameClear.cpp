@@ -16,6 +16,8 @@ void GameClear::Update()
 
 void GameClear::Draw()
 {
+
+	Novice::DrawSprite(0, 0, GCbg, 1.0,1.0, 0.0f, WHITE);
 }
 
 GameClear::~GameClear()

@@ -153,7 +153,16 @@ private:
 	int gh1 = Novice::LoadTexture("block.png");
 	int gh2 = Novice::LoadTexture("stoneedge.png");
 
+	//背景
 	int gh3 = Novice::LoadTexture("background.png");
+	int gh4 = Novice::LoadTexture("background_2.png");
+	int gh5 = Novice::LoadTexture("background_3.png");
+
+	//説明
+	int TuBg = Novice::LoadTexture("text.png");
+
+	int GCbgS = Novice::LoadTexture("text2.png");
+	int GcbgE = Novice::LoadTexture("text3.png");
 
 	//音楽
 	uint32_t soundDataHandle_ = 0;
@@ -163,5 +172,8 @@ private:
 	//プレイヤー
 
 	//エネミー
+
+	//境界線
+	int Bog = Novice::LoadTexture("Boundary.png");
 };
 
