@@ -4,7 +4,7 @@ enum SceneType {
 	TITLE,
 	STAGE,
 	CLEAR,
-	SceneMax
+	OVER,
 };
 
 class Iscene

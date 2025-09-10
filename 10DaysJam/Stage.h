@@ -5,6 +5,8 @@
 #include "Iscene.h"
 #include "Enemy.h"
 
+#include "audio/Audio.h"
+
 class Stage : public Iscene
 {
 public:
@@ -118,8 +120,6 @@ private:
 
 	//敵の生成
 	std::list<std::unique_ptr<Enemy>> enemies_;
-
-	bool isHitP2E = false;
 
 	int enemyMax = 0;
 

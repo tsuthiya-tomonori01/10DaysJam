@@ -6,6 +6,7 @@ GameManager::GameManager()
 	sceneArr_[TITLE] = std::make_unique<TitleScene>();
 	sceneArr_[STAGE] = std::make_unique<Stage>();
 	sceneArr_[CLEAR] = std::make_unique<GameClear>();
+	sceneArr_[OVER]  = std::make_unique<GameOver>();
 
 	currentSceneNo_ = iScene->GetSceneNo();
 

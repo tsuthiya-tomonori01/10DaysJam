@@ -5,12 +5,13 @@
 #include "TitleScene.h"
 #include "Stage.h"
 #include "GameClear.h"
+#include "GameOver.h"
 
 class GameManager
 {
 private:
 
-	std::unique_ptr<Iscene> sceneArr_[3];
+	std::unique_ptr<Iscene> sceneArr_[4];
 
 	int currentSceneNo_;
 	int preSceneno_;

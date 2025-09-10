@@ -7,6 +7,8 @@ void Enemy::Initialize(Vector2 Pos) {
 	enemyRad = 64.0f;
 	enemySpeed = 0.5f;
 	Reset(Pos);
+
+	EnemyAlive = true;
 }
 
 void Enemy::Update() {

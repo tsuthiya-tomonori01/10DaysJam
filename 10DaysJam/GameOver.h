@@ -1,12 +1,12 @@
 ﻿#pragma once
+#include "Iscene.h"
+
 #include "KamataEngine.h"
 #include "Novice.h"
 
-#include "Iscene.h"
-
 #include "audio/Audio.h"
 
-class GameClear : public Iscene
+class GameOver : public Iscene
 {
 public:
 
@@ -16,6 +16,10 @@ public:
 
 	void Draw() override;
 
-	~GameClear();
+	~GameOver();
+
+private:
+
+
 };
 

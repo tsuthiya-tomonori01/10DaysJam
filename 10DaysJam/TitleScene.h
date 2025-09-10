@@ -4,6 +4,8 @@
 
 #include "Iscene.h"
 
+#include "audio/Audio.h"
+
 class TitleScene : public Iscene
 {
 public:
