@@ -62,7 +62,15 @@ void Stage::Draw() {
 	Novice::DrawSprite(1920 - scrollX, 0, Bog, 1.0f, 1.0f, 0.0f, WHITE);
 
 	//プレイヤーの描画
-	Novice::DrawBox(int(playerPos.x - scrollX), int(playerPos.y), int(playerRad), int(playerRad), 0.0f, BLUE, kFillModeSolid);
+	if (isRight)
+	{
+		Novice::DrawSprite(int(playerPos.x - scrollX), int(playerPos.y), PBg1, 1.0, 1.0, 0.0f, WHITE);
+	}
+	else
+	{
+		Novice::DrawSprite(int(playerPos.x - scrollX), int(playerPos.y), PBg2, 1.0, 1.0, 0.0f, WHITE);
+	}
+	
 
 	if (isBullet)
 	{
